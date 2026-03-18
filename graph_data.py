@@ -176,7 +176,7 @@ _Z3 = ["Meera Bhawan", "Birla Shishu Vihar","Birla Balika Vidyapeeth", "Saraswat
 _Z4_EVE = ["Shankar Bhawan", "All Night Canteen", "Akshay Supermarket"]
 _Z4_NIGHT = ["All Night Canteen"]
 
-_EXT = ["Bhagirath Bhawan", "Rana Pratap Bhawan","Ashok Bhawan", "CVR Bhawan", "SAC", "Malviya Bhawan", "Looters Truck", "Vfast"]
+_EXT = ["Bhagirath Bhawan", "Rana Pratap Bhawan","Ashok Bhawan", "CVR Bhawan", "SAC", "Malviya Bhawan", "Looters", "Vfast"]
 
 def _make_slot_entry(nodes, k):
     #Return {node: k} dict for a list of nodes.
