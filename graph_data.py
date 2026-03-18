@@ -48,7 +48,6 @@ NODE_COORDINATES = {
 
 # EDGES
 # Each tuple: ("Node A", "Node B", distance_in_metres)
-# Graph is UNDIRECTED — every edge is traversable in both directions.
 # Distances are Haversine-verified straight-line values between GPS coords
 EDGES = [
     ("Clock Tower",         "FD2",                      118.77),
@@ -154,7 +153,90 @@ EDGES = [
     ("Vfast",               "Ashok Bhawan",              134.94),  
 ]
 
-# GRAPH STATISTICS  (auto-computed — do not edit manually)
+# Congestion schedule for L3 
+# Format: { time_slot_index: {node_name: k_factor} }
+# Time slot index = floor(minutes_since_midnight / 15)
+# Slot 0  = 00:00–00:14,  Slot 31 = 07:45–07:59, Slot 35 = 08:45–08:59, etc.
+# Only non-1.0 slots are listed.  All others default to k = 1.0.
+# Helper: convert "HH:MM" to slot index
+
+def _slot(hhmm: str) -> int:
+    h, m = map(int, hhmm.split(":"))
+    return (h * 60 + m) // 15
+
+# Zone member lists (used to expand slot entries)
+_Z1 = ["LTC", "FD1", "Library", "Food Ministry", "Srinivasa Bhawan","New Workshop", "Vishwakarma Bhawan", "PIEDS", "Lecture Theatre Complex"]
+_Z1_ACADEMIC = ["Lecture Theatre Complex", "FD1", "Srinivasa Bhawan", "Vishwakarma Bhawan"]
+_Z1_FULL = ["Lecture Theatre Complex", "FD1", "Food Ministry","Srinivasa Bhawan", "Vishwakarma Bhawan","New Workshop", "Library"]
+
+_Z2 = ["NAB", "Clock Tower", "FD2", "FD3", "Krishna Bhawan", "Gandhi Bhawan", "Ram Bhawan", "Budh Bhawan"]
+
+_Z3 = ["Meera Bhawan", "Birla Shishu Vihar","Birla Balika Vidyapeeth", "Saraswati Temple"]
+
+_Z4_EVE = ["Shankar Bhawan", "All Night Canteen", "Akshay Supermarket"]
+_Z4_NIGHT = ["All Night Canteen"]
+
+_EXT = ["Bhagirath Bhawan", "Rana Pratap Bhawan","Ashok Bhawan", "CVR Bhawan", "SAC", "Malviya Bhawan", "Looters Truck", "Vfast"]
+
+def _make_slot_entry(nodes, k):
+    #Return {node: k} dict for a list of nodes.
+    return {n: k for n in nodes}
+
+# Build congestion schedule as {slot_index: {node: k}}
+CONGESTION_SCHEDULE: dict[int, dict[str, float]] = {}
+
+def _add_slots(start_hhmm, end_hhmm, nodes, k):
+    # Mark every 15-min slot in [start_hhmm, end_hhmm) with congestion k for the given node list.
+    s = _slot(start_hhmm)
+    e = _slot(end_hhmm)
+    entry = _make_slot_entry(nodes, k)
+    for idx in range(s, e):
+        if idx not in CONGESTION_SCHEDULE:
+            CONGESTION_SCHEDULE[idx] = {}
+        CONGESTION_SCHEDULE[idx].update(entry)
+
+# 07:45–08:00  morning rush  (Z1 food + Z2 + Z3)
+_add_slots("07:45", "08:00", ["FD1", "Food Ministry", "New Workshop","Srinivasa Bhawan", "Vishwakarma Bhawan","Malviya Bhawan"], 2.0)
+_add_slots("07:45", "08:00", _Z2 + _Z3, 2.0)
+
+# Classchange rushes (Z1 academic + Z2 + Z3, k=2.5)
+for start, end in [("08:45", "09:00"), ("09:45", "10:00"), ("11:45", "12:00"), ("12:45", "13:00"),("14:45", "15:00"), ("15:45", "16:00"), ("16:45", "17:00"), ("17:45", "18:00")]:
+    _add_slots(start, end, _Z1_ACADEMIC + ["FD1"], 2.5)
+    _add_slots(start, end, _Z2, 2.5)
+    _add_slots(start, end, _Z3, 2.0)
+
+_add_slots("10:45", "11:00", ["Lecture Theatre Complex", "FD1","New Workshop", "Vishwakarma Bhawan"], 2.5)
+_add_slots("10:45", "11:00", _Z2, 2.5)
+
+# Full Z1 (including FM) for 11:45–, 12:45–, 16:45–, 17:45–
+for start, end in [("11:45", "12:00"), ("12:45", "13:00"), ("16:45", "17:00"), ("17:45", "18:00")]:
+    _add_slots(start, end, ["Food Ministry"], 2.5)
+
+# 13:45–14:00  postlunch hostel return
+_add_slots("13:45", "14:00", ["FD2", "FD3", "NAB"], 1.4)
+_add_slots("13:45", "14:00", _Z3, 2.0)
+_add_slots("13:45", "14:00", ["Shankar Bhawan"], 1.3)
+
+# Extended Bhawans — same class-change + morning windows
+for start, end in [("07:45", "08:00"), ("08:45", "09:00"),("09:45", "10:00"), ("11:45", "12:00"),("12:45", "13:00"), ("13:45", "14:00"),
+                   ("14:45", "15:00"), ("15:45", "16:00"),("16:45", "17:00"), ("17:45", "18:00")]:
+    _add_slots(start, end, ["Bhagirath Bhawan", "Rana Pratap Bhawan","Ashok Bhawan", "CVR Bhawan"], 2.0)
+
+# 16:45–17:00 and 17:45–18:00  evening rush Z4 + extras
+for start, end in [("16:45", "17:00"), ("17:45", "18:00")]:
+    _add_slots(start, end, ["Shankar Bhawan", "All Night Canteen","Akshay Supermarket", "SAC","Vfast", "Looters"], 2.0)
+
+# 18:00–19:00  ANC + SAC + Vfast
+_add_slots("18:00", "19:00", ["All Night Canteen", "SAC", "Vfast","Looters"], 2.0)
+
+# 20:00–02:00  night canteen light rush
+_add_slots("20:00", "02:00", ["All Night Canteen", "Food Ministry", "Looters"], 1.4)
+
+# 21:00–23:00  Cnot light rush  (node not in main edge list — stored anyway)
+_add_slots("21:00", "23:00", ["Cnot"], 1.3)
+
+
+# GRAPH STATISTICS 
 def _compute_stats():
     from collections import defaultdict
     deg = defaultdict(int)
@@ -183,7 +265,7 @@ def _compute_stats():
 GRAPH_STATS = _compute_stats()
 
 
-# QUICK SELF-TEST  (run this file directly to verify)
+# QUICK SELF-TEST 
 if __name__ == "__main__":
     import math
 
