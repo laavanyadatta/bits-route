@@ -12,17 +12,17 @@ plot_empirical_vs_theory(empirical_data, theory_data)
 All plots are saved as PNG files & displayed .
 """
 
+from graph_data import EDGES, COORDINATES
+from algorithms import SearchResult
+from campus_graph import CampusGraph
+import numpy as np
+import matplotlib.animation as animation
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
 import math
 import matplotlib
 matplotlib.use("Agg")           # Non-interactive backend for file saving
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import matplotlib.animation as animation
-import numpy as np
 
-from campus_graph import CampusGraph
-from algorithms import SearchResult
-from graph_data import EDGES, COORDINATES
 
 ALGO_COLORS = {
     "BFS":                "#2196F3",   # blue
@@ -32,23 +32,23 @@ ALGO_COLORS = {
     "A* (haversine)":     "#A51FBD",   # purple
 }
 
-NODE_DEFAULT  = "#BBDEFB"
+NODE_DEFAULT = "#BBDEFB"
 NODE_EXPANDED = "#FFEE59"    # yellow while expanding
-NODE_PATH     = "#EF5350"    # red when on final path
-NODE_SOURCE   = "#66BB6A"    # green
-NODE_GOAL     = "#3590FF"    # blue
-EDGE_DEFAULT  = "#90A4AE"
-EDGE_PATH     = "#FF56B6"
+NODE_PATH = "#EF5350"    # red when on final path
+NODE_SOURCE = "#66BB6A"    # green
+NODE_GOAL = "#3590FF"    # blue
+EDGE_DEFAULT = "#90A4AE"
+EDGE_PATH = "#FF56B6"
 
 
 # Coordinate projection → plot positions
 def _get_positions(coords: dict) -> dict[str, tuple[float, float]]:
-# Convert (lat, lon) GPS coordinates to (x, y) plot positions in metres, relative to the centroid of all nodes.
+    """
+    Convert (lat, lon) → (x, y) in metres.
+    Origin is set to Clock Tower.
+    """
 
-    lats = [c[0] for c in coords.values()]
-    lons = [c[1] for c in coords.values()]
-    lat0 = sum(lats) / len(lats)
-    lon0 = sum(lons) / len(lons)
+    lat0, lon0 = coords["Clock Tower"]
 
     mpdlat = 111_320
     mpdlon = 111_320 * math.cos(math.radians(lat0))
@@ -99,9 +99,18 @@ def draw_graph(graph: CampusGraph, result: SearchResult, title: str = "", save_p
 
         # Label: smaller font for non-path nodes
         fontsize = 7.5 if name in result.path else 5.5
-        weight   = "bold" if name in result.path else "normal"
+        weight = "bold" if name in result.path else "normal"
+        # Custom offsets to avoid overlap
+        label_offsets = {
+            "Library": (6, 8),
+            "New Workshop": (-12, -10),
+            "Main Gate": (-12, -10),   # push right towards border
+        }
+
+        dx, dy = label_offsets.get(name, (4, 4))
+
         ax.annotate(name, (x, y),
-                    textcoords="offset points", xytext=(4, 4),
+                    textcoords="offset points", xytext=(dx, dy),
                     fontsize=fontsize, fontweight=weight,
                     color="#212121", zorder=5)
 
@@ -109,10 +118,12 @@ def draw_graph(graph: CampusGraph, result: SearchResult, title: str = "", save_p
     if len(result.path) >= 2:
         for i in range(len(result.path) - 1):
             u, v = result.path[i], result.path[i + 1]
-            x0, y0 = pos[u]; x1, y1 = pos[v]
+            x0, y0 = pos[u]
+            x1, y1 = pos[v]
             ax.annotate("",
                         xy=(x1, y1), xytext=(x0, y0),
-                        arrowprops=dict(arrowstyle="->",color=EDGE_PATH,lw=2.0),
+                        arrowprops=dict(arrowstyle="->",
+                                        color=EDGE_PATH, lw=2.0),
                         zorder=5)
 
     # Legend
@@ -130,14 +141,14 @@ def draw_graph(graph: CampusGraph, result: SearchResult, title: str = "", save_p
             f"Hops : {len(result.path)-1}\n"
             f"Expanded : {result.nodes_expanded} nodes\n"
             f"Generated : {result.nodes_generated} nodes")
-    ax.text(0.98, 0.02, info, transform=ax.transAxes,
-            fontsize=8, verticalalignment="bottom",
+    ax.text(0.98, 0.98, info, transform=ax.transAxes,
+            verticalalignment="top",
             horizontalalignment="right",
             bbox=dict(boxstyle="round,pad=0.4", facecolor="white",
                       alpha=0.85))
 
     ax.set_title(title or f"{result.algorithm}: "
-                         f"{result.source} → {result.goal}",
+                 f"{result.source} → {result.goal}",
                  fontsize=12, fontweight="bold")
     ax.set_xlabel("East–West (metres from centroid)")
     ax.set_ylabel("North–South (metres from centroid)")
@@ -150,7 +161,9 @@ def draw_graph(graph: CampusGraph, result: SearchResult, title: str = "", save_p
     plt.close()
 
 # 2. Algorithm comparison bar chart
-def plot_comparison(results: list[SearchResult],save_path: str = "comparison.png") -> None:
+
+
+def plot_comparison(results: list[SearchResult], save_path: str = "comparison.png") -> None:
 
     names = [r.algorithm for r in results]
     expand = [r.nodes_expanded for r in results]
@@ -172,7 +185,8 @@ def plot_comparison(results: list[SearchResult],save_path: str = "comparison.png
             ["Count", "Count", "Metres"],
             ["Nodes Expanded", "Nodes Generated", "Path Cost (m)"]):
 
-        bars = ax.bar(x, vals, color=colors, edgecolor="#37474F", linewidth=0.7, width=0.55)
+        bars = ax.bar(x, vals, color=colors, edgecolor="#37474F",
+                      linewidth=0.7, width=0.55)
         ax.set_xticks(x)
         ax.set_xticklabels(names, rotation=20, ha="right", fontsize=8)
         ax.set_ylabel(ylabel, fontsize=9)
@@ -205,9 +219,9 @@ def plot_empirical_vs_theory(
     empirical : {algorithm_name: actual_nodes_expanded}
     theory    : {algorithm_name: theoretical_upper_bound}
     """
-    algos  = list(empirical.keys())
-    emp_v  = [empirical[a] for a in algos]
-    the_v  = [theory[a]    for a in algos]
+    algos = list(empirical.keys())
+    emp_v = [empirical[a] for a in algos]
+    the_v = [theory[a] for a in algos]
 
     x = np.arange(len(algos))
     fig, ax = plt.subplots(figsize=(11, 6))
@@ -243,5 +257,3 @@ def plot_empirical_vs_theory(
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
     print(f"  Saved empirical vs theory: {save_path}")
     plt.close()
-
-
