@@ -1,4 +1,4 @@
-# BITS Pilani Campus Navigator
+# Multi-criteria Route Planning System - BITS Pilani
 
 A pathfinding system for navigating the BITS Pilani campus using classical AI search algorithms, with a primary focus on **Time-Dependent A\*** (TD-A\*) that adapts routes based on real-world congestion patterns.
 
