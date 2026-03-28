@@ -65,6 +65,9 @@ class CampusGraph:
     def h_haversine(self, node: str, goal: str) -> float:
         return haversine(node, goal, self.coords)
 
+    def h_euclidean(self, node: str, goal: str) -> float:
+        return euclidean(node, goal, self.coords)
+
     # Time-dependent edge weight
     def get_congestion(self, node: str, time_slot: int) -> float:
        #Look up the congestion factor k for a node at a given time slot. Returns 1.0 (free-flow) if no congestion is scheduled.
