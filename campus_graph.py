@@ -27,17 +27,19 @@ def haversine(node_a: str, node_b: str,
     a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
     return 2 * EARTH_RADIUS_M * math.asin(math.sqrt(a))
 
+LAT_M   = 111_195.0                      # metres per degree of latitude
+REF_LAT = math.radians(28.362)           # campus centre latitude for lon scaling
+ 
 def euclidean(node_a: str, node_b: str,
               coords: dict = COORDINATES) -> float:
-    
-    # This is the heuristic h(n) used in Greedy and A* search.
-    x1, y1 = coords[node_a]
-    x2, y2 = coords[node_b]
-
-    dx = x2 - x1
-    dy = y2 - y1
-
+                
+    lat1, lon1 = coords[node_a]
+    lat2, lon2 = coords[node_b]
+    dy = (lat2 - lat1) * LAT_M
+    dx = (lon2 - lon1) * LAT_M * math.cos(REF_LAT)
+                
     return math.sqrt(dx * dx + dy * dy)
+ 
 
 class CampusGraph:
 #Sparse Weighted Undirected Graph of the BITS Pilani campus.
