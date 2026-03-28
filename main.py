@@ -247,7 +247,7 @@ def user_benchmark(graph, stops, dep_time):
     results = [r_bfs, r_ucs, r_gr_h, r_gr_e, r_ah_h, r_ah_e, r_td]
     
     for r in results:
-        p(f"  {r.algorithm:<25} exp={r.nodes_expanded:>3}  "
+        p(f"  {r.algorithm:<30} exp={r.nodes_expanded:>3}  "
           f"cost={r.cost:>8.1f} m  hops={len(r.path)-1}")
 
     plot_comparison(results,save_path=f"{OUT}/comparison_user.png")
