@@ -27,6 +27,18 @@ def haversine(node_a: str, node_b: str,
     a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
     return 2 * EARTH_RADIUS_M * math.asin(math.sqrt(a))
 
+def euclidean(node_a: str, node_b: str,
+              coords: dict = COORDINATES) -> float:
+    
+    # This is the heuristic h(n) used in Greedy and A* search.
+    x1, y1 = coords[node_a]
+    x2, y2 = coords[node_b]
+
+    dx = x2 - x1
+    dy = y2 - y1
+
+    return math.sqrt(dx * dx + dy * dy)
+
 class CampusGraph:
 #Sparse Weighted Undirected Graph of the BITS Pilani campus.
 #Attributes:
