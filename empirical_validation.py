@@ -5,10 +5,13 @@ from algorithms import SearchResult
 
 N = 40  # total nodes in the campus graph
 THEORY = {
-    "BFS": N,
-    "UCS": N,
-    "Greedy (haversine)": 25,
-    "A* (haversine)": 22,}
+    "BFS":                  N,   
+    "UCS":                  N,   
+    "Greedy (haversine)":   25, 
+    "Greedy (euclidean)":   25,  
+    "A* (haversine)":       22,  
+    "A* (euclidean)":       22,  
+}
 
 def run_valid(results: list[SearchResult]) -> dict[str, int]:
     empirical = {}
