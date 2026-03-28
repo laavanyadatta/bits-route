@@ -172,7 +172,10 @@ EDGES = [
     ("Patel Statue", "Shankar Bhawan", 68.75),
 
     # ── Shankar Bhawan
-    ("Shankar Bahwan", "Vyas Bhawan", 165.92),
+    ("Shankar Bhawan", "Vyas Bhawan", 165.92),
+
+    # ── Vyas Bhawan
+    ("Vyas Bhawan", "Saraswati Temple", 82.33),
 
     # ── PIEDS
     ("PIEDS", "New Workshop", 95.33),
