@@ -1,0 +1,176 @@
+# user widnow for hard case 2, -- 2. Source: Main Gate, Stop 1: Vfast, Stop 2: All Night Canteen, 
+                                                        Stop 3: Saraswati Temple, Goal: Meera Bhawan, Departure: 17:45
+                                                        continues from hard case 1  
+
+Plan another route? [Y/N]: y
+
+  Step 1 - Start location
+
+  Locations:
+      1.  ANC Circle
+      2.  Akshay Supermarket
+      3.  All Night Canteen
+      4.  Ashok Bhawan
+      5.  Ashok Circle
+      6.  BET-TACT
+      7.  Bhagirath Bhawan
+      8.  Birla Balika Vidyapeeth
+      9.  Birla Shishu Vihar
+     10.  Budh Bhawan
+     11.  CVR Bhawan
+     12.  Clock Tower
+     13.  Cnot
+     14.  FD1
+     15.  FD2
+     16.  FD3
+     17.  Food Ministry
+     18.  Gandhi Bhawan
+     19.  Gandhi Statue
+     20.  Krishna Bhawan
+     21.  Lecture Theatre Complex
+     22.  Library
+     23.  Looters
+     24.  Main Gate
+     25.  Malviya Bhawan
+     26.  Mandir Meera Intersection
+     27.  Meera Bhawan
+     28.  NAB
+     29.  New Workshop
+     30.  PIEDS
+     31.  Patel Statue
+     32.  Ram Bhawan
+     33.  Rana Pratap Bhawan
+     34.  SAC
+     35.  Saraswati Temple
+     36.  Shankar Bhawan
+     37.  Srinivasa Bhawan
+     38.  Vfast
+     39.  Vishwakarma Bhawan
+     40.  Vyas Bhawan
+
+  Start (number or name): main gate
+  > Main Gate
+
+  Step 2 - Intermediate stops (press Enter to skip)
+  Add stop 1 (or Enter to choose desination): 38
+  > Added: Vfast
+  Add stop 2 (or Enter to choose desination): 3
+  > Added: All Night Canteen
+  Add stop 3 (or Enter to choose desination): temple
+  > Added: Saraswati Temple
+  Add stop 4 (or Enter to choose desination):
+
+  Step 3 - Destination
+
+  Locations:
+      1.  ANC Circle
+      2.  Akshay Supermarket
+      3.  All Night Canteen
+      4.  Ashok Bhawan
+      5.  Ashok Circle
+      6.  BET-TACT
+      7.  Bhagirath Bhawan
+      8.  Birla Balika Vidyapeeth
+      9.  Birla Shishu Vihar
+     10.  Budh Bhawan
+     11.  CVR Bhawan
+     12.  Clock Tower
+     13.  Cnot
+     14.  FD1
+     15.  FD2
+     16.  FD3
+     17.  Food Ministry
+     18.  Gandhi Bhawan
+     19.  Gandhi Statue
+     20.  Krishna Bhawan
+     21.  Lecture Theatre Complex
+     22.  Library
+     23.  Looters
+     24.  Main Gate
+     25.  Malviya Bhawan
+     26.  Mandir Meera Intersection
+     27.  Meera Bhawan
+     28.  NAB
+     29.  New Workshop
+     30.  PIEDS
+     31.  Patel Statue
+     32.  Ram Bhawan
+     33.  Rana Pratap Bhawan
+     34.  SAC
+     35.  Saraswati Temple
+     36.  Shankar Bhawan
+     37.  Srinivasa Bhawan
+     38.  Vfast
+     39.  Vishwakarma Bhawan
+     40.  Vyas Bhawan
+
+  Destination (number or name): meera
+  Ambiguous -- matches: Mandir Meera Intersection, Meera Bhawan
+
+  Destination (number or name): meera bhawan
+  > Meera Bhawan
+
+  Departure time HH:MM [Enter = 09:00]: 17:45
+  > 17:45
+
+  ------------------------------------------------------------
+  Route      : Main Gate  ->  Vfast  ->  All Night Canteen  ->  Saraswati Temple  ->  Meera Bhawan
+  Departure  : 17:45
+  Algorithm  : TD-A* (Haversine, time-dependent weights)
+  ------------------------------------------------------------
+  Run? [Y/N]: y
+
+========================
+  USER ROUTE BENCHMARK
+========================
+  BFS                       exp= 40  cost=  1152.3 m  hops=8
+  UCS                       exp= 40  cost=  1009.6 m  hops=9
+  Greedy (haversine)        exp=  9  cost=  1078.0 m  hops=8
+  Greedy (euclidean)        exp=  9  cost=  1078.0 m  hops=8
+  A* (haversine)            exp= 16  cost=  1009.6 m  hops=9
+  A* (euclidean)            exp= 40  cost=  1009.6 m  hops=9
+  TD-A* (depart 17:45)      exp= 27  cost=  1262.3 m  hops=10
+ Saved comparison: outputs/comparison_user.png
+
+============================================================
+  EMPIRICAL vs THEORY — Main Gate → Meera Bhawan
+============================================================
+  Algorithm                 Empirical   Theory   Ratio
+  ─────────────────────────────────────────────────────
+  BFS                              40       40    1.00x
+  UCS                              40       40    1.00x
+  Greedy (haversine)                9       25    0.36x
+  Greedy (euclidean)                9       25    0.36x
+  A* (haversine)                   16       22    0.73x
+  A* (euclidean)                   40       22    1.82x
+
+  Saved empirical vs theory: outputs/empirical_vs_theory_user.png
+
+===========
+  RESULTS
+===========
+
+  Leg 1: Main Gate  ->  Vfast
+    Depart 17:45  |  Arrive ~17:47  |  178.2 m  |  1 hops  |  2 nodes expanded
+    Path : Main Gate -> Vfast
+  ------------------------------------------------------------
+  Leg 2: Vfast  ->  All Night Canteen
+    Depart 17:47  |  Arrive ~17:52  |  458.1 m  |  3 hops  |  4 nodes expanded
+    Path : Vfast -> Ashok Circle -> ANC Circle -> All Night Canteen
+  ------------------------------------------------------------
+  Leg 3: All Night Canteen  ->  Saraswati Temple
+    Depart 17:52  |  Arrive ~17:58  |  486.1 m  |  5 hops  |  7 nodes expanded
+    Path : All Night Canteen -> ANC Circle -> Patel Statue -> Shankar Bhawan -> Vyas Bhawan -> Saraswati Temple
+  ------------------------------------------------------------
+  Leg 4: Saraswati Temple  ->  Meera Bhawan
+    Depart 17:58  |  Arrive ~18:02  |  370.3 m  |  3 hops  |  4 nodes expanded
+    Path : Saraswati Temple -> Mandir Meera Intersection -> Birla Shishu Vihar -> Meera Bhawan
+  ------------------------------------------------------------
+  TOTAL  1492.7 m  over 12 hops
+  Full path: Main Gate -> Vfast -> Ashok Circle -> ANC Circle -> All Night Canteen -> ANC Circle -> Patel Statue -> Shankar Bhawan -> Vyas Bhawan -> Saraswati Temple -> Mandir Meera Intersection -> Birla Shishu Vihar -> Meera Bhawan
+  Saved: outputs/user_route_1745.png
+  PNG -> outputs/user_route_1745.png
+
+  Plan another route? [Y/N]: n
+
+  Goodbye.                                                          
