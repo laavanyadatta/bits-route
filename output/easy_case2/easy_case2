@@ -1,4 +1,5 @@
 # User window for easy case 2 -- Source: Clock Tower, Goal: NAB, Departure: 10:00
+
 ==============================================================
   INTERACTIVE ROUTING  (TD-A* with time-dependent weights)
 ==============================================================
@@ -146,4 +147,8 @@
   ------------------------------------------------------------
   Saved: outputs/user_route_1000.png
   PNG -> outputs/user_route_1000.png
+
+  Plan another route? [Y/N]: n
+
+  Goodbye.
 
