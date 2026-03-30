@@ -1,0 +1,174 @@
+# user window for hard case 1 -- Source: Cnot, Stop 1: Akshay Supermarket, Stop 2: All Night Canteen, 
+                                               Stop 3: Bhagirath Bhawan, Goal: PIEDS, Departure: 08:45 
+
+                                                 
+==============================================================
+  INTERACTIVE ROUTING  (TD-A* with time-dependent weights)
+==============================================================
+
+  Step 1 - Start location
+
+  Locations:
+      1.  ANC Circle
+      2.  Akshay Supermarket
+      3.  All Night Canteen
+      4.  Ashok Bhawan
+      5.  Ashok Circle
+      6.  BET-TACT
+      7.  Bhagirath Bhawan
+      8.  Birla Balika Vidyapeeth
+      9.  Birla Shishu Vihar
+     10.  Budh Bhawan
+     11.  CVR Bhawan
+     12.  Clock Tower
+     13.  Cnot
+     14.  FD1
+     15.  FD2
+     16.  FD3
+     17.  Food Ministry
+     18.  Gandhi Bhawan
+     19.  Gandhi Statue
+     20.  Krishna Bhawan
+     21.  Lecture Theatre Complex
+     22.  Library
+     23.  Looters
+     24.  Main Gate
+     25.  Malviya Bhawan
+     26.  Mandir Meera Intersection
+     27.  Meera Bhawan
+     28.  NAB
+     29.  New Workshop
+     30.  PIEDS
+     31.  Patel Statue
+     32.  Ram Bhawan
+     33.  Rana Pratap Bhawan
+     34.  SAC
+     35.  Saraswati Temple
+     36.  Shankar Bhawan
+     37.  Srinivasa Bhawan
+     38.  Vfast
+     39.  Vishwakarma Bhawan
+     40.  Vyas Bhawan
+
+  Start (number or name): 13  
+  > Cnot
+
+  Step 2 - Intermediate stops (press Enter to skip)
+  Add stop 1 (or Enter to choose desination): 2
+  > Added: Akshay Supermarket
+  Add stop 2 (or Enter to choose desination): all night canteen
+  > Added: All Night Canteen
+  Add stop 3 (or Enter to choose desination): bhag
+  > Added: Bhagirath Bhawan
+  Add stop 4 (or Enter to choose desination):
+
+  Step 3 - Destination
+
+  Locations:
+      1.  ANC Circle
+      2.  Akshay Supermarket
+      3.  All Night Canteen
+      4.  Ashok Bhawan
+      5.  Ashok Circle
+      6.  BET-TACT
+      7.  Bhagirath Bhawan
+      8.  Birla Balika Vidyapeeth
+      9.  Birla Shishu Vihar
+     10.  Budh Bhawan
+     11.  CVR Bhawan
+     12.  Clock Tower
+     13.  Cnot
+     14.  FD1
+     15.  FD2
+     16.  FD3
+     17.  Food Ministry
+     18.  Gandhi Bhawan
+     19.  Gandhi Statue
+     20.  Krishna Bhawan
+     21.  Lecture Theatre Complex
+     22.  Library
+     23.  Looters
+     24.  Main Gate
+     25.  Malviya Bhawan
+     26.  Mandir Meera Intersection
+     27.  Meera Bhawan
+     28.  NAB
+     29.  New Workshop
+     30.  PIEDS
+     31.  Patel Statue
+     32.  Ram Bhawan
+     33.  Rana Pratap Bhawan
+     34.  SAC
+     35.  Saraswati Temple
+     36.  Shankar Bhawan
+     37.  Srinivasa Bhawan
+     38.  Vfast
+     39.  Vishwakarma Bhawan
+     40.  Vyas Bhawan
+
+  Destination (number or name): 30
+  > PIEDS
+
+  Departure time HH:MM [Enter = 09:00]: 08:45
+  > 08:45
+
+  ------------------------------------------------------------
+  Route      : Cnot  ->  Akshay Supermarket  ->  All Night Canteen  ->  Bhagirath Bhawan  ->  PIEDS
+  Departure  : 08:45
+  Algorithm  : TD-A* (Haversine, time-dependent weights)
+  ------------------------------------------------------------
+  Run? [Y/N]: Y
+
+========================
+  USER ROUTE BENCHMARK
+========================
+  BFS                       exp= 39  cost=  1230.2 m  hops=6
+  UCS                       exp= 40  cost=  1220.4 m  hops=8
+  Greedy (haversine)        exp=  7  cost=  1230.5 m  hops=6
+  Greedy (euclidean)        exp=  7  cost=  1230.5 m  hops=6
+  A* (haversine)            exp= 14  cost=  1220.4 m  hops=8
+  A* (euclidean)            exp= 40  cost=  1220.4 m  hops=8
+  TD-A* (depart 08:45)      exp= 44  cost=  1337.4 m  hops=9
+ Saved comparison: outputs/comparison_user.png
+
+============================================================
+  EMPIRICAL vs THEORY — Cnot → PIEDS
+============================================================
+  Algorithm                 Empirical   Theory   Ratio
+  ─────────────────────────────────────────────────────
+  BFS                              39       40    0.97x
+  UCS                              40       40    1.00x
+  Greedy (haversine)                7       25    0.28x
+  Greedy (euclidean)                7       25    0.28x
+  A* (haversine)                   14       22    0.64x
+  A* (euclidean)                   40       22    1.82x
+
+  Saved empirical vs theory: outputs/empirical_vs_theory_user.png
+
+===========
+  RESULTS
+===========
+
+  Leg 1: Cnot  ->  Akshay Supermarket
+    Depart 08:45  |  Arrive ~08:47  |  179.6 m  |  1 hops  |  2 nodes expanded
+    Path : Cnot -> Akshay Supermarket
+  ------------------------------------------------------------
+  Leg 2: Akshay Supermarket  ->  All Night Canteen
+    Depart 08:47  |  Arrive ~08:51  |  337.5 m  |  1 hops  |  2 nodes expanded
+    Path : Akshay Supermarket -> All Night Canteen
+  ------------------------------------------------------------
+  Leg 3: All Night Canteen  ->  Bhagirath Bhawan
+    Depart 08:51  |  Arrive ~08:52  |  112.5 m  |  2 hops  |  3 nodes expanded
+    Path : All Night Canteen -> ANC Circle -> Bhagirath Bhawan
+  ------------------------------------------------------------
+  Leg 4: Bhagirath Bhawan  ->  PIEDS
+    Depart 08:52  |  Arrive ~09:02  |  831.6 m  |  6 hops  |  11 nodes expanded
+    Path : Bhagirath Bhawan -> Gandhi Bhawan -> Krishna Bhawan -> FD2 -> Food Ministry -> New Workshop -> PIEDS
+  ------------------------------------------------------------
+  TOTAL  1461.2 m  over 10 hops
+  Full path: Cnot -> Akshay Supermarket -> All Night Canteen -> ANC Circle -> Bhagirath Bhawan -> Gandhi Bhawan -> Krishna Bhawan -> FD2 -> Food Ministry -> New Workshop -> PIEDS   
+  Saved: outputs/user_route_0845.png
+  PNG -> outputs/user_route_0845.png
+
+  Plan another route? [Y/N]: y
+                                                 
