@@ -1,0 +1,13 @@
+#This folder is to store the outputs of the live run cases
+
+Easy cases:
+1. Source: Looters, Goal: Malviya Bhawan, Departure: 14:00
+2. Source: Clock Tower, Goal: NAB, Departure: 10:00
+
+Medium cases:
+1. Source: Meera Bhawan, Goal: Library, Departure: 08:45
+2. Source: Akshay Supermarket, Stop 1: Vyas Bhawan, Stop 2: Gandhi Bhawan, Goal: Lecture Theatre Complex, Departure: 11:43
+
+Hard cases:
+1. Source: Cnot, Stop 1: Akshay Supermarket, Stop 2: All Night Canteen, Stop 3: Bhagirath Bhawan, Goal: PIEDS, Departure: 08:45 
+2. Source: Main Gate, Stop 1: Vfast, Stop 2: All Night Canteen, Stop 3: Saraswati Temple, Goal: Meera Bhawan, Departure: 17:45
